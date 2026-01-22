@@ -18,8 +18,7 @@ int main()
     resolution.x = sf::VideoMode::getDesktopMode().size.x;
     resolution.y = sf::VideoMode::getDesktopMode().size.y;
 
-    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(resolution.x, resolution.y)), "title", sf::State::Fullscreen);
-    window.setVerticalSyncEnabled(false); //关闭垂直同步
+    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(resolution.x, resolution.y)), "title", sf::Style::Default);
     sf::View mainView(sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(0, 0)));
 
     sf::Clock clock;
@@ -33,12 +32,12 @@ int main()
     sf::IntRect arena;
     while (window.isOpen())
     {
-        std::optional event = window.pollEvent();
-        sf::Keyboard::Key code = event->getIf<sf::Event::KeyPressed>()->code;
-        while (event)
+        
+        while (std::optional event = window.pollEvent())
         {
             if (event->is<sf::Event::KeyPressed>())
             {
+                sf::Keyboard::Key code = event->getIf<sf::Event::KeyPressed>()->code;
                 if (code == sf::Keyboard::Key::Enter && state == State::PLAYING)
                 {
                     state = State::PAUSED;
@@ -48,11 +47,11 @@ int main()
                 {
                     state = State::PLAYING;
                     clock.restart();
-                    std::cout << "游戏开始\n";
+                    std::cout << "游戏PLAYING\n";
                 }
                 else if (code == sf::Keyboard::Key::Enter && state == State::GAME_OVER)
                 {
-                    std::cout << "游戏开始\n";
+                    std::cout << "游戏LEVELING_UP\n";
                     state = State::LEVELING_UP;
                 }
                 if (state == State::PLAYING)
@@ -106,14 +105,6 @@ int main()
                 std::cout << "stopRight\n";
                 player.stopRight();
             }
-        }
-
-        if (state == State::LEVELING_UP)
-        {
-            if (code == sf::Keyboard::Key::Num1)
-                state = State::PLAYING;
-            if (code == sf::Keyboard::Key::Num2)
-                std::cout << "按下了数字2" << std::endl;
         }
     }
     return 0;
