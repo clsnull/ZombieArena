@@ -9,7 +9,7 @@ Player::Player()
 	m_texture(),
 	m_sprite(m_texture) 
 {
-	if(m_texture.loadFromFile("graphics/player.png")){
+	if(!m_texture.loadFromFile("graphics/player.png")){
 		std::cout <<"加载文件失败 graphics/player.png "<<std::endl;
 	}
 	m_sprite.setOrigin(sf::Vector2f(25, 25));

@@ -15,7 +15,7 @@ run.sh: $(APP_NAME)
 	chmod +x $(DIST_DIR)/run.sh
 
 $(APP_NAME): main.o
-	g++ $(DIST_DIR)/main.o -o $(DIST_DIR)/$(APP_NAME) \
+	g++ $(DIST_DIR)/main.o $(DIST_DIR)/Player.o -o $(DIST_DIR)/$(APP_NAME) \
 	-L$(SFML_LIB) -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o: clean cp Player.o
