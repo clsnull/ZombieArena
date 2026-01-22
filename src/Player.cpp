@@ -147,3 +147,7 @@ void Player::increaseHealthLevel(int amount) {
 		m_health = m_maxHealth;
 	}
 }
+
+sf::Sprite Player::getSprite(){
+	return m_sprite;
+}

@@ -106,6 +106,8 @@ int main()
                 player.stopRight();
             }
         }
+        window.draw(player.getSprite());
+        window.display();
     }
     return 0;
 }
