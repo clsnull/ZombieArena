@@ -18,26 +18,28 @@ int main()
     resolution.x = sf::VideoMode::getDesktopMode().size.x;
     resolution.y = sf::VideoMode::getDesktopMode().size.y;
 
-    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(resolution.x, resolution.y)), "title", sf::Style::Default);
-    sf::View mainView(sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(0, 0)));
+    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(resolution.x, resolution.y)), "ZombieArena");
+    sf::View mainView(sf::FloatRect(sf::Vector2f(0, 0), resolution));
 
     sf::Clock clock;
 
     sf::Time gameTimeTotal;
 
-    sf::Vector2i mouseWorldPosition;
+    sf::Vector2f mouseWorldPosition;
     sf::Vector2i mouseScreenPosition;
     Player player;
 
     sf::IntRect arena;
     while (window.isOpen())
     {
-        
+
         while (std::optional event = window.pollEvent())
         {
+
             if (event->is<sf::Event::KeyPressed>())
             {
                 sf::Keyboard::Key code = event->getIf<sf::Event::KeyPressed>()->code;
+
                 if (code == sf::Keyboard::Key::Enter && state == State::PLAYING)
                 {
                     state = State::PAUSED;
@@ -57,12 +59,59 @@ int main()
                 if (state == State::PLAYING)
                 {
                 }
+
+                if (state == State::LEVELING_UP)
+                {
+                    // Handle  the player  LEVELING  up
+                    if (code == sf::Keyboard::Key::Num1)
+                    {
+                        state = State::PLAYING;
+                    }
+                    if (code == sf::Keyboard::Key::Num2)
+                    {
+                        state = State::PLAYING;
+                    }
+                    if (code == sf::Keyboard::Key::Num3)
+                    {
+                        state = State::PLAYING;
+                    }
+                    if (code == sf::Keyboard::Key::Num4)
+                    {
+                        state = State::PLAYING;
+                    }
+                    if (code == sf::Keyboard::Key::Num5)
+                    {
+                        state = State::PLAYING;
+                    }
+                    if (code == sf::Keyboard::Key::Num6)
+                    {
+                        state = State::PLAYING;
+                    }
+
+                    if (state == State::PLAYING)
+                    {
+                        arena.size.x = 500;
+                        arena.size.y = 500;
+                        arena.position.x = 0;
+                        arena.position.y = 0;
+                        // We  will modify  this  line  of  code  later
+                        int tileSize = 50;
+                        // Spawn  the player  in middle  of  the  arena
+                        std::cout << "spawn" << std::endl;
+                        player.spawn(arena, resolution, tileSize);
+
+                        // Reset  clock  so  there  isn't  a frame jump
+                        clock.restart();
+                    }
+                } //  End  LEVELING  up
             }
         }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
         {
             window.close();
         }
+
         if (state == State::PLAYING)
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
@@ -72,7 +121,6 @@ int main()
             }
             else
             {
-                std::cout << "stopUp\n";
                 player.stopUp();
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
@@ -82,7 +130,6 @@ int main()
             }
             else
             {
-                std::cout << "stopDown\n";
                 player.stopDown();
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
@@ -92,7 +139,6 @@ int main()
             }
             else
             {
-                std::cout << "stopLeft\n";
                 player.stopLeft();
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
@@ -102,11 +148,30 @@ int main()
             }
             else
             {
-                std::cout << "stopRight\n";
                 player.stopRight();
             }
+
+            sf::Time dt = clock.restart();
+
+            gameTimeTotal += dt;
+            float dtAsSeconds = dt.asSeconds();
+            mouseScreenPosition = sf::Mouse::getPosition();
+
+            mouseWorldPosition = window.mapPixelToCoords(sf::Mouse::getPosition(), mainView);
+
+            player.update(dtAsSeconds, sf::Mouse::getPosition());
+
+            sf::Vector2f playerPosition(player.getCenter());
+
+            mainView.setCenter(player.getCenter());
         }
-        window.draw(player.getSprite());
+
+        if (state == State::PLAYING)
+        {
+            window.clear();
+            window.setView(mainView);
+            window.draw(player.getSprite());
+        }
         window.display();
     }
     return 0;

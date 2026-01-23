@@ -9,7 +9,7 @@ private:
 	// 玩家位置
 	sf::Vector2f m_position;
 	// 精灵
-	sf::Sprite m_sprite;
+	std::unique_ptr<sf::Sprite> m_sprite;
 	// 纹理
 	sf::Texture m_texture;
 	// 屏幕分辨率是多少
@@ -41,7 +41,7 @@ public:
 	sf::FloatRect getPosition();
 	sf::Vector2f getCenter();
 	sf::Angle getRotation();
-	sf::Sprite getSprite();
+	sf::Sprite& getSprite();
 	void moveLeft();
 	void moveRight();
 	void moveUp();
