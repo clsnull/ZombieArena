@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <cmath>
 #include <iostream>
+#include <filesystem>
 
 Player::Player()
 	:m_speed(START_SPEED),
@@ -9,7 +10,9 @@ Player::Player()
 	m_texture(),
 	m_sprite(m_texture) 
 {
-	if(!m_texture.loadFromFile("graphics/player.png")){
+	std::filesystem::path path("graphics/player.png");
+	auto absolute_path = std::filesystem::absolute(path);
+	if(!m_texture.loadFromFile(absolute_path)){
 		std::cout <<"加载文件失败 graphics/player.png "<<std::endl;
 	}
 	m_sprite.setOrigin(sf::Vector2f(25, 25));
